@@ -1,0 +1,1886 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Letture Italiane - Esercizi di Comprensione</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Georgia', 'Times New Roman', serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f5f5f5;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 40px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        /* Control Panel Styles */
+        .control-panel {
+            position: static;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        
+        .control-panel h3 {
+            color: white;
+            margin: 0 0 15px 0;
+            font-size: 1.3em;
+            background: none;
+            padding: 0;
+            border: none;
+        }
+        
+        .progress-bar-container {
+            background-color: rgba(255,255,255,0.3);
+            border-radius: 10px;
+            height: 25px;
+            margin: 15px 0;
+            overflow: hidden;
+        }
+        
+        .progress-bar {
+            background: linear-gradient(90deg, #4ade80 0%, #22c55e 100%);
+            height: 100%;
+            transition: width 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 0.9em;
+        }
+        
+        .button-group {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 15px;
+        }
+        
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.95em;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            flex: 1;
+            min-width: 140px;
+        }
+        
+        .btn-primary {
+            background-color: #4ade80;
+            color: #1a1a1a;
+        }
+        
+        .btn-primary:hover {
+            background-color: #22c55e;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+        
+        .btn-secondary {
+            background-color: #fbbf24;
+            color: #1a1a1a;
+        }
+        
+        .btn-secondary:hover {
+            background-color: #f59e0b;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+        
+        .btn-danger {
+            background-color: #ef4444;
+            color: white;
+        }
+        
+        .btn-danger:hover {
+            background-color: #dc2626;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+        
+        .btn-info {
+            background-color: #3b82f6;
+            color: white;
+        }
+        
+        .btn-info:hover {
+            background-color: #2563eb;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+        
+        .stats {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid rgba(255,255,255,0.3);
+        }
+        
+        .stat-item {
+            text-align: center;
+        }
+        
+        .stat-number {
+            font-size: 1.8em;
+            font-weight: bold;
+            display: block;
+        }
+        
+        .stat-label {
+            font-size: 0.85em;
+            opacity: 0.9;
+        }
+        
+        /* Answer Feedback Styles */
+        .correct {
+            background-color: #d1fae5 !important;
+            border-left: 4px solid #10b981 !important;
+        }
+        
+        .incorrect {
+            background-color: #fee2e2 !important;
+            border-left: 4px solid #ef4444 !important;
+        }
+        
+        .feedback-icon {
+            display: inline-block;
+            margin-left: 10px;
+            font-weight: bold;
+            font-size: 1.2em;
+        }
+        
+        .feedback-icon.correct {
+            color: #10b981;
+        }
+        
+        .feedback-icon.incorrect {
+            color: #ef4444;
+        }
+        
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            animation: fadeIn 0.3s;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        .modal-content {
+            background-color: white;
+            margin: 5% auto;
+            padding: 30px;
+            border-radius: 10px;
+            width: 90%;
+            max-width: 600px;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            animation: slideDown 0.3s;
+        }
+        
+        @keyframes slideDown {
+            from {
+                transform: translateY(-50px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+        
+        .modal-header {
+            border-bottom: 2px solid #667eea;
+            padding-bottom: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .modal-header h2 {
+            color: #667eea;
+            margin: 0;
+        }
+        
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            line-height: 20px;
+        }
+        
+        .close:hover {
+            color: #000;
+        }
+        
+        .score-display {
+            text-align: center;
+            padding: 20px;
+            margin: 20px 0;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 10px;
+        }
+        
+        .score-display .score {
+            font-size: 3em;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+        
+        .answer-summary {
+            margin-top: 20px;
+        }
+        
+        .answer-item {
+            padding: 10px;
+            margin: 8px 0;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+        }
+        
+        /* Toast Notification */
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background-color: #1a1a1a;
+            color: white;
+            padding: 15px 25px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            z-index: 2000;
+            animation: slideInRight 0.3s ease;
+            display: none;
+        }
+        
+        @keyframes slideInRight {
+            from {
+                transform: translateX(400px);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+        
+        .toast.show {
+            display: block;
+        }
+        
+        .toast.success {
+            background-color: #10b981;
+        }
+        
+        .toast.error {
+            background-color: #ef4444;
+        }
+        
+        .toast.info {
+            background-color: #3b82f6;
+        }
+        
+        h1 {
+            color: #8B0000;
+            border-bottom: 3px solid #8B0000;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+        
+        h2 {
+            color: #8B0000;
+            margin-top: 30px;
+            margin-bottom: 15px;
+            font-size: 1.5em;
+        }
+        
+        h3 {
+            color: #2c5282;
+            margin-top: 25px;
+            margin-bottom: 10px;
+            background-color: #f0f4f8;
+            padding: 8px 12px;
+            border-left: 4px solid #2c5282;
+        }
+        
+        .story {
+            background-color: #fffef9;
+            padding: 25px;
+            margin: 20px 0;
+            border-left: 4px solid #daa520;
+            line-height: 1.8;
+        }
+        
+        .story-meta {
+            font-style: italic;
+            color: #666;
+            margin-bottom: 15px;
+            font-size: 0.9em;
+        }
+        
+        .vocabulary {
+            background-color: #e8f4f8;
+            padding: 10px 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+            font-size: 0.9em;
+        }
+        
+        .exercise-section {
+            background-color: #f9f9f9;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+        }
+        
+        .question {
+            margin: 15px 0;
+            padding: 10px;
+            background-color: white;
+            border-left: 3px solid #4a90e2;
+        }
+        
+        .question-number {
+            font-weight: bold;
+            color: #4a90e2;
+        }
+        
+        .options {
+            margin-left: 20px;
+            margin-top: 8px;
+        }
+        
+        .option {
+            margin: 5px 0;
+            padding: 5px;
+        }
+        
+        input[type="checkbox"],
+        input[type="radio"] {
+            margin-right: 8px;
+        }
+        
+        .fill-blank {
+            border-bottom: 2px solid #4a90e2;
+            min-width: 150px;
+            display: inline-block;
+            margin: 0 5px;
+        }
+        
+        .word-bank {
+            background-color: #fff3cd;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+            font-style: italic;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+        }
+        
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+        
+        th {
+            background-color: #8B0000;
+            color: white;
+        }
+        
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        
+        /* Make table cells editable */
+        td[contenteditable="true"] {
+            cursor: text;
+            min-height: 40px;
+            background-color: #fffef9;
+        }
+        
+        td[contenteditable="true"]:hover {
+            background-color: #fff9e6;
+            outline: 2px solid #fbbf24;
+        }
+        
+        td[contenteditable="true"]:focus {
+            background-color: #fff;
+            outline: 2px solid #667eea;
+        }
+        
+        td[contenteditable="true"]:empty:before {
+            content: "Click to type...";
+            color: #999;
+            font-style: italic;
+        }
+        
+        .note-box {
+            background-color: #ffe4e1;
+            padding: 15px;
+            margin: 15px 0;
+            border-left: 4px solid #ff6b6b;
+            border-radius: 4px;
+        }
+        
+        .points {
+            color: #28a745;
+            font-weight: bold;
+            float: right;
+        }
+        
+        @media print {
+            body {
+                background-color: white;
+            }
+            .container {
+                box-shadow: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        
+        <!-- CONTROL PANEL -->
+        <div class="control-panel">
+            <h3>📚 Control Panel</h3>
+            <div class="progress-bar-container">
+                <div class="progress-bar" id="progressBar">0%</div>
+            </div>
+            <div class="button-group">
+                <button class="btn btn-primary" onclick="saveProgress()">💾 Save Progress</button>
+                <button class="btn btn-secondary" onclick="checkAnswers()">✓ Check Answers</button>
+                <button class="btn btn-info" onclick="copyShareableURL()">🔗 Share URL</button>
+                <button class="btn btn-info" onclick="exportAnswers()">📥 Export Answers</button>
+                <button class="btn btn-info" onclick="document.getElementById('importFile').click()">📤 Import Answers</button>
+                <button class="btn btn-danger" onclick="resetAll()">🔄 Reset All</button>
+                <input type="file" id="importFile" accept=".json" style="display: none;" onchange="importAnswers(event)">
+            </div>
+            <div class="stats">
+                <div class="stat-item">
+                    <span class="stat-number" id="answeredCount">0</span>
+                    <span class="stat-label">Answered</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number" id="totalCount">0</span>
+                    <span class="stat-label">Total Questions</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number" id="scoreDisplay">-</span>
+                    <span class="stat-label">Score</span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Toast Notification -->
+        <div id="toast" class="toast"></div>
+        
+        <!-- Results Modal -->
+        <div id="resultsModal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <span class="close" onclick="closeModal()">&times;</span>
+                    <h2>📊 Your Results</h2>
+                </div>
+                <div id="resultsContent"></div>
+            </div>
+        </div>
+        
+        <!-- STORY 1: LA TESTA FRA LE NUVOLE -->
+        <section id="story1">
+            <h1>LA TESTA FRA LE NUVOLE</h1>
+            <div class="story-meta">
+                di Ian McEwan<br>
+                tratto da: <em>L'inventore dei sogni</em>, trad. di Susanna Basso, Einaudi, Torino 2002
+            </div>
+            
+            <div class="story">
+                <p>Peter Fortune ha dieci anni e tutti dicono che è un bambino difficile. Peter però non si sente difficile: non <span class="vocabulary">scaraventa</span> (dal verbo "scaraventare"; buttare con forza) bottiglie di latte contro il muro; non si rovescia in testa il <span class="vocabulary">ketchup</span> (parola inglese; salsa di pomodoro) per poi dire che è sangue, non colpisce le caviglie di sua nonna con la spada quando gioca.</p>
+                
+                <p>Peter inoltre mangia di tutto tranne il pesce, le uova, il formaggio, e tutte le verdure, tranne le patate. Non è un bambino rumoroso. Ha un nome facile da dire e una faccia <span class="vocabulary">pallida</span> (chiara) e <span class="vocabulary">lentigginosa</span> (che ha molte lentiggini, che sono piccole macchie della pelle) facile da ricordare.</p>
+                
+                <p>Va a scuola tutti i giorni, non fa <span class="vocabulary">dispetti</span> (scherzi) a sua sorella e nessun poliziotto è mai andato a casa sua per arrestarlo (per portarlo in prigione). Nessun dottore ha mai detto che è pazzo... e allora perché dicono di lui che è un bambino difficile?</p>
+                
+                <p>Forse perché se ne sta sempre zitto e questo alla gente non piace. A Peter poi piace stare da solo, a pensare, e nemmeno questo alla gente piace. A scuola Peter è spesso <span class="vocabulary">distratto</span> (pensa a cose diverse da quelle che si fanno in quel momento): il suo corpo è lì, ma la sua mente è in viaggio e anche a casa ha avuto dei problemi per la sua distrazione.</p>
+                
+                <p>Un Natale suo padre, Thomas Fortune, sta preparando le decorazioni in <span class="vocabulary">soggiorno</span> (salotto). Deve attaccare dei nastri in alto in un angolo. In quell'angolo c'è una poltrona dove sta seduto Peter.</p>
+                
+                <p>«Non ti muovere - gli dice suo padre, - salgo sullo <span class="vocabulary">schienale</span> (parte della poltrona dove si appoggia la schiena) della poltrona per arrivare al muro.»</p>
+                
+                <p>«Va bene!» risponde Peter.</p>
+                
+                <p>Suo padre ora è in piedi sullo schienale e Peter sta pensando a qualcosa. A un certo punto Peter sente un po' di <span class="vocabulary">appetito</span> (sente fame, vuole mangiare qualcosa), si alza dalla poltrona e va in cucina a prendere dei biscotti. Sente alle sue spalle un <span class="vocabulary">frastuono</span> (forte rumore). Si volta e vede suo padre con la testa tra il muro e la poltrona e i piedi per aria. Suo padre vuole fare a pezzettini Peter! Sua madre però ride dall'altra parte della stanza.</p>
+                
+                <p>«Scusa, papà - dice Peter, - mi sono dimenticato che eri lì!»</p>
+            </div>
+            
+            <!-- EXERCISES FOR STORY 1 -->
+            <div class="exercise-section">
+                <h3>LA COMPRENSIONE DELL'ASCOLTO</h3>
+                
+                <div class="question">
+                    <span class="question-number">1.</span> Dopo aver ascoltato il brano, leggi le domande e scegli la risposta giusta.
+                    
+                    <div style="margin-top: 15px;">
+                        <strong>a. Chi è Peter Fortune?</strong>
+                        <div class="options">
+                            <div class="option">
+                                <input type="radio" name="q1a" id="q1a1" value="1">
+                                <label for="q1a1">Un bambino di dieci anni.</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" name="q1a" id="q1a2" value="2">
+                                <label for="q1a2">Un bambino che si definisce difficile.</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" name="q1a" id="q1a3" value="3">
+                                <label for="q1a3">Un bambino solo.</label>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div style="margin-top: 15px;">
+                        <strong>b. Peter si sente difficile?</strong>
+                        <div class="options">
+                            <div class="option">
+                                <input type="radio" name="q1b" id="q1b1" value="1">
+                                <label for="q1b1">Sì</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" name="q1b" id="q1b2" value="2">
+                                <label for="q1b2">No</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" name="q1b" id="q1b3" value="3">
+                                <label for="q1b3">Un po'</label>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div style="margin-top: 15px;">
+                        <strong>c. Che cosa piace a Peter?</strong>
+                        <div class="options">
+                            <div class="option">
+                                <input type="radio" name="q1c" id="q1c1" value="1">
+                                <label for="q1c1">Fare dispetti e rumore.</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" name="q1c" id="q1c2" value="2">
+                                <label for="q1c2">Rovesciarsi il ketchup in testa.</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" name="q1c" id="q1c3" value="3">
+                                <label for="q1c3">Stare zitto e solo a pensare.</label>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div style="margin-top: 15px;">
+                        <strong>d. Che cosa vuol dire "testa tra le nuvole"?</strong>
+                        <div class="options">
+                            <div class="option">
+                                <input type="radio" name="q1d" id="q1d1" value="1">
+                                <label for="q1d1">Avere il corpo a scuola.</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" name="q1d" id="q1d2" value="2">
+                                <label for="q1d2">Essere distratto.</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" name="q1d" id="q1d3" value="3">
+                                <label for="q1d3">Sentire appetito.</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="question">
+                    <span class="question-number">2.</span> <strong>VERO O FALSO?</strong> Stabilisci se le affermazioni che seguono sono vere (V) o false (F).
+                    
+                    <table>
+                        <tr>
+                            <th>Affermazione</th>
+                            <th style="width: 60px;">V</th>
+                            <th style="width: 60px;">F</th>
+                        </tr>
+                        <tr>
+                            <td>a. Peter scaraventa bottiglie di latte contro il muro.</td>
+                            <td><input type="radio" name="q2a" value="V"></td>
+                            <td><input type="radio" name="q2a" value="F"></td>
+                        </tr>
+                        <tr>
+                            <td>b. Nessun poliziotto ha mai arrestato Peter.</td>
+                            <td><input type="radio" name="q2b" value="V"></td>
+                            <td><input type="radio" name="q2b" value="F"></td>
+                        </tr>
+                        <tr>
+                            <td>c. Un dottore ha detto che Peter è pazzo.</td>
+                            <td><input type="radio" name="q2c" value="V"></td>
+                            <td><input type="radio" name="q2c" value="F"></td>
+                        </tr>
+                        <tr>
+                            <td>d. Peter fa sempre dispetti a sua sorella.</td>
+                            <td><input type="radio" name="q2d" value="V"></td>
+                            <td><input type="radio" name="q2d" value="F"></td>
+                        </tr>
+                        <tr>
+                            <td>e. Peter è un bambino distratto.</td>
+                            <td><input type="radio" name="q2e" value="V"></td>
+                            <td><input type="radio" name="q2e" value="F"></td>
+                        </tr>
+                        <tr>
+                            <td>f. Peter ha la testa tra le nuvole.</td>
+                            <td><input type="radio" name="q2f" value="V"></td>
+                            <td><input type="radio" name="q2f" value="F"></td>
+                        </tr>
+                        <tr>
+                            <td>g. Thomas Fortune fa a pezzettini suo figlio.</td>
+                            <td><input type="radio" name="q2g" value="V"></td>
+                            <td><input type="radio" name="q2g" value="F"></td>
+                        </tr>
+                    </table>
+                </div>
+                
+                <div class="question">
+                    <span class="question-number">3.</span> Completa le frasi con le parole dell'elenco.
+                    <div class="word-bank">
+                        distrazione - appetito - frastuono - schienale - soggiorno - dispetto
+                    </div>
+                    
+                    <p>a. Peter a scuola non sta mai attento e ha problemi per la sua <span class="fill-blank"></span>.</p>
+                    <p>b. Il padre di Peter prepara le decorazioni in <span class="fill-blank"></span>.</p>
+                    <p>c. Peter fa qualche <span class="fill-blank"></span> a sua sorella.</p>
+                    <p>d. Il padre di Peter cade dalla poltrona e fa un gran <span class="fill-blank"></span>.</p>
+                    <p>e. Il padre di Peter sale sullo <span class="fill-blank"></span> della poltrona per mettere i nastri sul muro.</p>
+                    <p>f. Peter sente <span class="fill-blank"></span> e va a prendere i biscotti.</p>
+                </div>
+                
+                <div class="question">
+                    <span class="question-number">4.</span> Completa le frasi con le parole dell'elenco.
+                    <div class="word-bank">
+                        frastuono - appetito - dispetto - soggiorno - schienale - distrazione
+                    </div>
+                    
+                    <p>a. Per il <span class="fill-blank"></span> che viene dalla strada non riesco a dormire.</p>
+                    <p>b. Qualcuno ha nascosto il mio zaino: chi ha fatto questo <span class="fill-blank"></span>?</p>
+                    <p>c. Vado a mangiare qualcosa perché sento un po' di <span class="fill-blank"></span>.</p>
+                    <p>d. Sono così stanco che dormo appoggiato allo <span class="fill-blank"></span> della sedia!</p>
+                    <p>e. La mia famiglia e io ci sediamo in <span class="fill-blank"></span> ogni sera per chiacchierare.</p>
+                    <p>f. A causa della mia <span class="fill-blank"></span> non so dove ho messo le chiavi di casa.</p>
+                </div>
+                
+                <div class="question">
+                    <span class="question-number">5.</span> Metti gli aggettivi qualificativi dove mancano.
+                    <div class="word-bank">
+                        zitto - pallido - distratto - difficile - rumoroso
+                    </div>
+                    
+                    <p>a. Non so com'è la voce di Peter perché sta sempre <span class="fill-blank"></span>.</p>
+                    <p>b. Il mio quartiere è molto <span class="fill-blank"></span> perché c'è molto traffico di auto a tutte le ore.</p>
+                    <p>c. Questo esercizio non è <span class="fill-blank"></span> e riesco a farlo in fretta!</p>
+                    <p>d. Il mio viso è <span class="fill-blank"></span> perché ho un po' di mal di testa.</p>
+                    <p>e. Ho sempre la testa tra le nuvole, sono proprio <span class="fill-blank"></span>!</p>
+                </div>
+            </div>
+            
+            <div class="exercise-section">
+                <h3>LA SCRITTURA</h3>
+                
+                <div class="question">
+                    <span class="question-number">7.</span> Leggi il testo e completa la tabella.
+                    
+                    <table style="margin-top: 15px;">
+                        <tr>
+                            <th>PETER FA</th>
+                            <th>PETER NON FA</th>
+                        </tr>
+                        <tr>
+                            <td>Peter è sempre zitto.</td>
+                            <td>Peter non scaraventa bottiglie di latte contro il muro.</td>
+                        </tr>
+                        <tr>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                        </tr>
+                        <tr>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                        </tr>
+                        <tr>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+            
+            <div class="exercise-section">
+                <h3>IL LAVORO CON GLI ALTRI</h3>
+                
+                <div class="question">
+                    <span class="question-number">8.</span> Completa la tabella e poi racconta ai tuoi compagni quali sono i tuoi pregi e i tuoi difetti.
+                    
+                    <table style="margin-top: 15px;">
+                        <tr>
+                            <th>PREGI</th>
+                            <th>DIFETTI</th>
+                        </tr>
+                        <tr>
+                            <td>Sono generoso perché presto le mie cose a chi me le chiede.</td>
+                            <td>Sono distratto e dimentico sempre tutto.</td>
+                        </tr>
+                        <tr>
+                            <td>&nbsp;<br>&nbsp;<br>&nbsp;</td>
+                            <td>&nbsp;<br>&nbsp;<br>&nbsp;</td>
+                        </tr>
+                        <tr>
+                            <td>&nbsp;<br>&nbsp;<br>&nbsp;</td>
+                            <td>&nbsp;<br>&nbsp;<br>&nbsp;</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </section>
+        
+        <hr style="margin: 40px 0; border: none; border-top: 2px solid #8B0000;">
+        
+        <!-- STORY 2: GIORNATA CAMPALE -->
+        <section id="story2">
+            <h1>GIORNATA CAMPALE</h1>
+            <div class="story-meta">
+                di Jerry Spinelli<br>
+                tratto da: <em>La schiappa</em>, trad. di A. Ragusa, Mondadori, Milano 2002
+            </div>
+            
+            <div class="story">
+                <p>La <span class="vocabulary">Giornata Campale</span> (giornata all'aperto) è una tradizione per la scuola elementare Satterfield. Per i bambini piccoli è un giorno di giochi, di festa e divertimento. Per i ragazzi più grandi di "quarta" e di "quinta", quello che importa è vincere nelle gare e la gara più importante è la corsa.</p>
+                
+                <p>In ogni classe ci sono quattro squadre: <span class="vocabulary">Porpora</span> (rosso carico, ma in questo caso è viola), Rosso, Verde, Giallo. Zinkoff fa parte della squadra Porpora. In tutto nella squadra ci sono sette ragazzi e di questi Gary Hobin è il migliore.</p>
+                
+                <p>Il signor Yalowitz, l'allenatore, dice che tutti devono partecipare a una parte delle diverse prove di corsa. Quando corre Zinkoff gli altri corridori sono in testa. Quando corrono gli altri ragazzi Porpora, la sua squadra invece è in testa.</p>
+                
+                <p>All'ultima prova i Porpora sono i primi della classifica e i sei ragazzi della squadra non vogliono far gareggiare Zinkoff, ma tocca anche a lui.</p>
+                
+                <p>«Vai!» gli grida Hobin e Zinkoff va.</p>
+                
+                <p>Corre, si agita, muove le braccia, ma sembra fermo.</p>
+                
+                <p>«Corri! - gli grida Hobin. - Corri, stupida tartaruga!»</p>
+                
+                <p>Zinkoff corre, ma tutti lo superano e arriva ultimo. I Porpora hanno perso.</p>
+                
+                <p>Hobin va vicino a lui e gli dice con rabbia: «Sei una <span class="vocabulary">schiappa</span> (incapace)!». Arrivano gli altri e gli ripetono: «Schiappa, schiappa, schiappa!».</p>
+                
+                <p>A casa i genitori di Zinkoff gli chiedono: «Com'è andata? Hai vinto qualcosa?».</p>
+                
+                <p>«No, non ho vinto niente!» urla lui e piange e corre in camera.</p>
+                
+                <p>Più tardi suo padre lo chiama: «Vieni a fare un giro in macchina?».</p>
+                
+                <p>Zinkoff si precipita. Salgono sulla loro vecchia macchina che il papà chiama <span class="vocabulary">Catorcio</span> (oggetto vecchio e malridotto) Sei. La macchina fa fatica ad andare e suo padre la incoraggia: «Vai, <span class="vocabulary">gioiellino</span> (gioiello; oggetto prezioso, di valore) mio, sono qui con te, non c'è problema!». Vanno in giro <span class="vocabulary">senza meta</span> (senza sapere dove andare).</p>
+                
+                <p>Più tardi, nel suo letto Zinkoff ripensa al giro in macchina e ha capito che, anche se non è bravo nella corsa, per il suo papà lui sarà sempre un gioiellino e mai un catorcio!</p>
+            </div>
+            
+            <!-- EXERCISES FOR STORY 2 -->
+            <div class="exercise-section">
+                <h3>LA COMPRENSIONE DELLA LETTURA</h3>
+                
+                <div class="question">
+                    <span class="question-number">1.</span> Leggi le domande e scegli la risposta giusta.
+                    
+                    <div style="margin-top: 15px;">
+                        <strong>a. Chi si diverte nella Giornata Campale?</strong>
+                        <div class="options">
+                            <div class="option">
+                                <input type="radio" name="q2_1a" id="q2_1a1" value="1">
+                                <label for="q2_1a1">Tutti.</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" name="q2_1a" id="q2_1a2" value="2">
+                                <label for="q2_1a2">Soprattutto i bambini più piccoli.</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" name="q2_1a" id="q2_1a3" value="3">
+                                <label for="q2_1a3">I ragazzi di "quarta" e di "quinta".</label>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div style="margin-top: 15px;">
+                        <strong>b. Che cosa è importante per i ragazzi grandi?</strong>
+                        <div class="options">
+                            <div class="option">
+                                <input type="radio" name="q2_1b" id="q2_1b1" value="1">
+                                <label for="q2_1b1">Vincere.</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" name="q2_1b" id="q2_1b2" value="2">
+                                <label for="q2_1b2">Partecipare.</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" name="q2_1b" id="q2_1b3" value="3">
+                                <label for="q2_1b3">Correre.</label>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div style="margin-top: 15px;">
+                        <strong>c. Quando Zinkoff corre,</strong>
+                        <div class="options">
+                            <div class="option">
+                                <input type="radio" name="q2_1c" id="q2_1c1" value="1">
+                                <label for="q2_1c1">la squadra perde.</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" name="q2_1c" id="q2_1c2" value="2">
+                                <label for="q2_1c2">la squadra vince.</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" name="q2_1c" id="q2_1c3" value="3">
+                                <label for="q2_1c3">tutti ridono.</label>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div style="margin-top: 15px;">
+                        <strong>d. Per suo papà Zinkoff è</strong>
+                        <div class="options">
+                            <div class="option">
+                                <input type="radio" name="q2_1d" id="q2_1d1" value="1">
+                                <label for="q2_1d1">una schiappa.</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" name="q2_1d" id="q2_1d2" value="2">
+                                <label for="q2_1d2">un catorcio.</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" name="q2_1d" id="q2_1d3" value="3">
+                                <label for="q2_1d3">un gioiellino.</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="question">
+                    <span class="question-number">2.</span> Completa le frasi con le parole dell'elenco.
+                    <div class="word-bank">
+                        gara - festa - gioco - schiappa - meta - divertimento
+                    </div>
+                    
+                    <p>a. Zinkoff partecipa alla <span class="fill-blank"></span> di corsa della scuola.</p>
+                    <p>b. Zinkoff non è bravo nella corsa, è una vera <span class="fill-blank"></span>.</p>
+                    <p>c. Per i bambini piccoli giocare è un vero <span class="fill-blank"></span>.</p>
+                    <p>d. Zinkoff e suo padre girano in macchina senza una <span class="fill-blank"></span>.</p>
+                    <p>e. Per i ragazzi grandi la corsa non è solo un <span class="fill-blank"></span> perché vogliono vincere.</p>
+                    <p>f. La Giornata Campale per la scuola Satterfield è una vera <span class="fill-blank"></span>.</p>
+                </div>
+                
+                <div class="question">
+                    <span class="question-number">3.</span> Completa le frasi con le parole dell'elenco.
+                    <div class="word-bank">
+                        gara - festa - gioco - schiappa - meta - divertimento
+                    </div>
+                    
+                    <p>a. Oggi sono triste e non mi va di fare <span class="fill-blank"></span>.</p>
+                    <p>b. Non è vero che sei una <span class="fill-blank"></span>, sei bravo come tutti gli altri ragazzi!</p>
+                    <p>c. Il <span class="fill-blank"></span> più bello è quello dove partecipano tutti.</p>
+                    <p>d. Ridere e scherzare con gli amici è per tutti un vero <span class="fill-blank"></span>.</p>
+                    <p>e. Dobbiamo decidere la <span class="fill-blank"></span> del nostro viaggio.</p>
+                    <p>f. Le squadre in <span class="fill-blank"></span> sono tutte molto forti. Chi vincerà?</p>
+                </div>
+            </div>
+            
+            <div class="exercise-section">
+                <h3>IL LAVORO CON GLI ALTRI</h3>
+                
+                <div class="question">
+                    <span class="question-number">7.</span> Elenca le cose che sai fare molto bene e le cose che fai molto male. Poi raccontale a voce alla tua classe o al tuo gruppo di lavoro.
+                    
+                    <table style="margin-top: 15px;">
+                        <tr>
+                            <th>IO SONO MOLTO BRAVO/A A...</th>
+                            <th>IO SONO UNA SCHIAPPA A...</th>
+                        </tr>
+                        <tr>
+                            <td>cantare</td>
+                            <td>ballare</td>
+                        </tr>
+                        <tr>
+                            <td>&nbsp;<br>&nbsp;<br>&nbsp;</td>
+                            <td>&nbsp;<br>&nbsp;<br>&nbsp;</td>
+                        </tr>
+                        <tr>
+                            <td>&nbsp;<br>&nbsp;<br>&nbsp;</td>
+                            <td>&nbsp;<br>&nbsp;<br>&nbsp;</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </section>
+        
+        <hr style="margin: 40px 0; border: none; border-top: 2px solid #8B0000;">
+        
+        <!-- STORY 3: PARLA MATTEO -->
+        <section id="story3">
+            <h1>PARLA MATTEO</h1>
+            <div class="story-meta">
+                di Anna Vivarelli<br>
+                tratto da: <em>Tre paia di occhi</em>, Nuove Edizioni Romane, Roma 2006
+            </div>
+            
+            <div class="story">
+                <p>Giacomo è altissimo, ma non mi fa paura perché siamo amici. È comodo avere un amico così grosso, perché mi difende da quelli che mi danno fastidio. Porto l'apparecchio ai denti e molti mi prendono in giro perché quando parlo non si capisce niente. Se c'è Giacomo, nessuno però dice una parola, né in faccia né dietro le spalle.</p>
+                
+                <p>Qualche volta però a Giacomo darei un pugno, anche se è amico mio. Per esempio ieri l'ho invitato a casa mia, ma ho invitato anche Juri. Giacomo mi ha detto che lui non viene da me, se c'è anche Juri.</p>
+                
+                <p>Juri è un ragazzo ucraino e mi fa ridere. Oggi Juri ha fatto gol mentre giocavamo a pallone, anche se non è per niente bravo a giocare. Era così contento che gridava in modo strano. Io ridevo, ma Giacomo no, perché diceva che non c'era niente da ridere.</p>
+                
+                <p>Qualche volta chiedo a Juri come si dice nella sua lingua: «La torta di pere e cioccolato è molto buona. È più buona della minestra di zucchine. L'insegnante quando ride diventa tutta rossa. Il pallone è un gioco bellissimo».</p>
+                
+                <p>Così noi ci divertiamo.</p>
+            </div>
+            
+            <!-- VERIFICATION EXERCISES -->
+            <div class="exercise-section">
+                <h2>VERIFICA: Parla Matteo</h2>
+                <div class="note-box">
+                    Questa è una verifica di primo livello
+                </div>
+                
+                <h3>LA COMPRENSIONE DELLA LETTURA</h3>
+                
+                <div class="question">
+                    <span class="question-number">1.</span> Leggi le domande e scegli la risposta giusta. <span class="points">punti .../5</span>
+                    
+                    <div style="margin-top: 15px;">
+                        <strong>a. Perché il bambino non ha paura di Giacomo?</strong>
+                        <div class="options">
+                            <div class="option">
+                                <input type="radio" name="q3_1a" id="q3_1a1" value="1">
+                                <label for="q3_1a1">Perché è un suo amico.</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" name="q3_1a" id="q3_1a2" value="2">
+                                <label for="q3_1a2">Perché è alto.</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" name="q3_1a" id="q3_1a3" value="3">
+                                <label for="q3_1a3">Perché è bravo.</label>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div style="margin-top: 15px;">
+                        <strong>b. Perché alcuni bambini prendono in giro Matteo?</strong>
+                        <div class="options">
+                            <div class="option">
+                                <input type="radio" name="q3_1b" id="q3_1b1" value="1">
+                                <label for="q3_1b1">Perché non è bravo a scuola.</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" name="q3_1b" id="q3_1b2" value="2">
+                                <label for="q3_1b2">Perché ha l'apparecchio ai denti e non parla bene.</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" name="q3_1b" id="q3_1b3" value="3">
+                                <label for="q3_1b3">Perché è amico di Juri.</label>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div style="margin-top: 15px;">
+                        <strong>c. Chi è Juri?</strong>
+                        <div class="options">
+                            <div class="option">
+                                <input type="radio" name="q3_1c" id="q3_1c1" value="1">
+                                <label for="q3_1c1">Un calciatore straniero.</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" name="q3_1c" id="q3_1c2" value="2">
+                                <label for="q3_1c2">Un compagno di Giacomo.</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" name="q3_1c" id="q3_1c3" value="3">
+                                <label for="q3_1c3">Un ragazzo ucraino.</label>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div style="margin-top: 15px;">
+                        <strong>d. Perché Giacomo non vuole andare a casa del suo amico?</strong>
+                        <div class="options">
+                            <div class="option">
+                                <input type="radio" name="q3_1d" id="q3_1d1" value="1">
+                                <label for="q3_1d1">Perché non vuole ridere.</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" name="q3_1d" id="q3_1d2" value="2">
+                                <label for="q3_1d2">Perché non gli piace giocare a pallone.</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" name="q3_1d" id="q3_1d3" value="3">
+                                <label for="q3_1d3">Perché c'è anche Juri.</label>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div style="margin-top: 15px;">
+                        <strong>e. Che cosa fa Giacomo quando qualcuno prende in giro il suo amico?</strong>
+                        <div class="options">
+                            <div class="option">
+                                <input type="radio" name="q3_1e" id="q3_1e1" value="1">
+                                <label for="q3_1e1">Ride.</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" name="q3_1e" id="q3_1e2" value="2">
+                                <label for="q3_1e2">Lo difende.</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" name="q3_1e" id="q3_1e3" value="3">
+                                <label for="q3_1e3">Dice che non c'è niente da ridere.</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="question">
+                    <span class="question-number">2.</span> <strong>VERO O FALSO?</strong> Stabilisci se le affermazioni che seguono sono vere (V) o false (F). <span class="points">punti .../5</span>
+                    
+                    <table>
+                        <tr>
+                            <th>Affermazione</th>
+                            <th style="width: 60px;">V</th>
+                            <th style="width: 60px;">F</th>
+                        </tr>
+                        <tr>
+                            <td>a. Giacomo è mio amico, ma a volte mi fa arrabbiare.</td>
+                            <td><input type="radio" name="q3_2a" value="V"></td>
+                            <td><input type="radio" name="q3_2a" value="F"></td>
+                        </tr>
+                        <tr>
+                            <td>b. Juri è mio amico, ma è poco divertente.</td>
+                            <td><input type="radio" name="q3_2b" value="V"></td>
+                            <td><input type="radio" name="q3_2b" value="F"></td>
+                        </tr>
+                        <tr>
+                            <td>c. Juri è il miglior calciatore della scuola.</td>
+                            <td><input type="radio" name="q3_2c" value="V"></td>
+                            <td><input type="radio" name="q3_2c" value="F"></td>
+                        </tr>
+                        <tr>
+                            <td>d. Juri è molto simpatico a Giacomo.</td>
+                            <td><input type="radio" name="q3_2d" value="V"></td>
+                            <td><input type="radio" name="q3_2d" value="F"></td>
+                        </tr>
+                        <tr>
+                            <td>e. L'insegnante quando ride diventa rossa.</td>
+                            <td><input type="radio" name="q3_2e" value="V"></td>
+                            <td><input type="radio" name="q3_2e" value="F"></td>
+                        </tr>
+                    </table>
+                </div>
+                
+                <div class="question">
+                    <span class="question-number">4.</span> Metti le parole dove mancano. <span class="points">punti .../5</span>
+                    <div class="word-bank">
+                        pallone - fastidio - torta - minestra - apparecchio
+                    </div>
+                    
+                    <p>a. Questa <span class="fill-blank"></span> di mele è deliziosa! Chi l'ha preparata?</p>
+                    <p>b. La torta è più buona della <span class="fill-blank"></span> di verdure.</p>
+                    <p>c. Il <span class="fill-blank"></span> è un gioco molto divertente.</p>
+                    <p>d. Ho l'<span class="fill-blank"></span> ai denti e non si capisce niente quando parlo.</p>
+                    <p>e. Nessuno mi dà <span class="fill-blank"></span>, perché il mio amico mi difende.</p>
+                </div>
+                
+                <div style="text-align: right; margin-top: 20px;">
+                    <strong>TOTALE: <span class="points">punti .../20</span></strong>
+                </div>
+            </div>
+        </section>
+        
+    </div>
+    
+    <script>
+        // Answer Key - Add correct answers for each question
+        const answerKey = {
+            // Story 1 - La Testa fra le Nuvole
+            'q1a': '1',  // Un bambino di dieci anni
+            'q1b': '2',  // No
+            'q1c': '3',  // Stare zitto e solo a pensare
+            'q1d': '2',  // Essere distratto
+            'q2a': 'F',  // Peter scaraventa bottiglie - False
+            'q2b': 'V',  // Nessun poliziotto ha arrestato Peter - True
+            'q2c': 'F',  // Dottore ha detto che è pazzo - False
+            'q2d': 'F',  // Peter fa sempre dispetti - False
+            'q2e': 'V',  // Peter è distratto - True
+            'q2f': 'V',  // Peter ha la testa tra le nuvole - True
+            'q2g': 'F',  // Thomas Fortune fa a pezzettini - False
+            
+            // Story 2 - Giornata Campale
+            'q2_1a': '2',  // Soprattutto i bambini più piccoli
+            'q2_1b': '1',  // Vincere
+            'q2_1c': '1',  // la squadra perde
+            'q2_1d': '3',  // un gioiellino
+            
+            // Story 3 - Parla Matteo
+            'q3_1a': '1',  // Perché è un suo amico
+            'q3_1b': '2',  // Perché ha l'apparecchio ai denti
+            'q3_1c': '3',  // Un ragazzo ucraino
+            'q3_1d': '3',  // Perché c'è anche Juri
+            'q3_1e': '2',  // Lo difende
+            'q3_2a': 'V',  // Giacomo mi fa arrabbiare - True
+            'q3_2b': 'F',  // Juri è poco divertente - False
+            'q3_2c': 'F',  // Juri è il miglior calciatore - False
+            'q3_2d': 'F',  // Juri è simpatico a Giacomo - False
+            'q3_2e': 'V',  // L'insegnante diventa rossa - True
+        };
+        
+        // ========== URL-BASED STORAGE FUNCTIONS ==========
+        
+        // Load answers from URL parameters
+        function loadFromURL() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const answersParam = urlParams.get('answers');
+            
+            if (answersParam) {
+                try {
+                    const decodedAnswers = atob(answersParam);
+                    const formData = JSON.parse(decodedAnswers);
+                    
+                    // Restore radio buttons
+                    Object.keys(formData).forEach(name => {
+                        const value = formData[name];
+                        if (typeof value === 'string' && !name.startsWith('blank_') && !name.startsWith('text_')) {
+                            const radio = document.querySelector(`input[name="${name}"][value="${value}"]`);
+                            if (radio) radio.checked = true;
+                        }
+                    });
+                    
+                    // Restore text inputs and fill-blanks
+                    Object.keys(formData).forEach(id => {
+                        if (id.startsWith('blank_')) {
+                            const index = parseInt(id.split('_')[1]);
+                            const blank = document.querySelectorAll('.fill-blank')[index];
+                            if (blank) {
+                                blank.textContent = formData[id];
+                            }
+                        } else if (id.startsWith('text_')) {
+                            const actualId = id.replace('text_', '');
+                            const input = document.getElementById(actualId);
+                            if (input && input.type === 'text') {
+                                input.value = formData[id];
+                            }
+                        }
+                    });
+                    
+                    showToast('✓ Answers loaded from URL!', 'success');
+                    return true;  // Indicate that URL data was loaded
+                } catch (error) {
+                    console.error('Error loading from URL:', error);
+                    showToast('Error loading answers from URL', 'error');
+                }
+            }
+            return false;  // No URL data found
+        }
+        
+        // Generate URL with answers
+        function generateShareableURL() {
+            const formData = {};
+            
+            // Save radio buttons
+            const radios = document.querySelectorAll('input[type="radio"]:checked');
+            radios.forEach(radio => {
+                formData[radio.name] = radio.value;
+            });
+            
+            // Save checkboxes
+            const checkboxes = document.querySelectorAll('input[type="checkbox"]:checked');
+            checkboxes.forEach(checkbox => {
+                if (!formData[checkbox.name]) {
+                    formData[checkbox.name] = [];
+                }
+                if (Array.isArray(formData[checkbox.name])) {
+                    formData[checkbox.name].push(checkbox.value);
+                }
+            });
+            
+            // Save text inputs
+            const textInputs = document.querySelectorAll('input[type="text"]');
+            textInputs.forEach(input => {
+                if (input.id && input.value.trim()) {
+                    formData[`text_${input.id}`] = input.value;
+                }
+            });
+            
+            // Save fill-in-the-blank answers
+            const fillBlanks = document.querySelectorAll('.fill-blank');
+            fillBlanks.forEach((blank, index) => {
+                const content = (blank.textContent || blank.innerText || '').trim();
+                if (content) {
+                    formData[`blank_${index}`] = content;
+                }
+            });
+            
+            // Encode to base64
+            const jsonString = JSON.stringify(formData);
+            const encodedAnswers = btoa(jsonString);
+            
+            // Create URL
+            const baseURL = window.location.origin + window.location.pathname;
+            const shareableURL = `${baseURL}?answers=${encodedAnswers}`;
+            
+            return shareableURL;
+        }
+        
+        // Copy URL to clipboard and show modal
+        function copyShareableURL() {
+            const answeredCount = Object.keys(answerKey).filter(questionName => {
+                return document.querySelector(`input[name="${questionName}"]:checked`);
+            }).length;
+            
+            if (answeredCount === 0) {
+                showToast('⚠️ Please answer some questions first!', 'error');
+                return;
+            }
+            
+            const url = generateShareableURL();
+            
+            // Try to copy to clipboard
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(url).then(() => {
+                    showToast('✓ Shareable URL copied to clipboard!', 'success');
+                    showURLModal(url);
+                }).catch(() => {
+                    // Fallback method
+                    fallbackCopyToClipboard(url);
+                });
+            } else {
+                // Fallback method for older browsers
+                fallbackCopyToClipboard(url);
+            }
+        }
+        
+        // Fallback copy method
+        function fallbackCopyToClipboard(url) {
+            const textarea = document.createElement('textarea');
+            textarea.value = url;
+            textarea.style.position = 'fixed';
+            textarea.style.opacity = '0';
+            document.body.appendChild(textarea);
+            textarea.select();
+            
+            try {
+                document.execCommand('copy');
+                showToast('✓ Shareable URL copied to clipboard!', 'success');
+            } catch (err) {
+                showToast('Please copy the URL manually from the popup', 'info');
+            }
+            
+            document.body.removeChild(textarea);
+            showURLModal(url);
+        }
+        
+        // Show URL in a modal
+        function showURLModal(url) {
+            const modal = document.getElementById('resultsModal');
+            const content = document.getElementById('resultsContent');
+            
+            content.innerHTML = `
+                <div style="text-align: center;">
+                    <h3>🔗 Shareable URL Generated!</h3>
+                    <p style="margin: 20px 0; color: #666; line-height: 1.6;">
+                        <strong>Your answers are now saved in this URL!</strong><br>
+                        Copy and paste it to access your progress on any device.
+                    </p>
+                    <div style="background-color: #f5f5f5; padding: 15px; border-radius: 8px; word-break: break-all; margin: 20px 0; font-family: monospace; font-size: 0.85em; max-height: 150px; overflow-y: auto; border: 2px dashed #667eea;">
+                        ${url}
+                    </div>
+                    <div style="display: flex; gap: 10px; justify-content: center; margin-top: 25px; flex-wrap: wrap;">
+                        <button class="btn btn-primary" onclick="copyURLAgain('${url}')">
+                            📋 Copy Again
+                        </button>
+                        <button class="btn btn-secondary" onclick="closeModal()">
+                            Close
+                        </button>
+                    </div>
+                    <div style="background: #e8f4f8; padding: 15px; border-radius: 8px; margin-top: 25px; text-align: left;">
+                        <strong>💡 How to use:</strong>
+                        <ul style="margin: 10px 0; padding-left: 20px;">
+                            <li>Bookmark this URL in your browser</li>
+                            <li>Email it to yourself</li>
+                            <li>Share it to access on another device</li>
+                            <li>The URL contains all your answers!</li>
+                        </ul>
+                    </div>
+                </div>
+            `;
+            
+            modal.style.display = 'block';
+        }
+        
+        // Copy URL again from modal
+        function copyURLAgain(url) {
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(url).then(() => {
+                    showToast('✓ URL copied again!', 'success');
+                });
+            } else {
+                fallbackCopyToClipboard(url);
+            }
+        }
+        
+        // ========== END URL-BASED STORAGE FUNCTIONS ==========
+        
+        // Initialize on page load
+        window.onload = function() {
+            loadFromURL();  // Load from URL first if available
+            loadProgress();
+            updateStats();
+            attachEventListeners();
+            showToast('Welcome! Your progress will be saved automatically.', 'info');
+        };
+        
+        // Attach event listeners to all inputs
+        function attachEventListeners() {
+            const inputs = document.querySelectorAll('input[type="radio"], input[type="checkbox"], input[type="text"], .fill-blank');
+            inputs.forEach(input => {
+                input.addEventListener('change', function() {
+                    autoSave();
+                    updateStats();
+                });
+                
+                if (input.classList.contains('fill-blank') || input.tagName === 'INPUT' && input.type === 'text') {
+                    input.addEventListener('input', function() {
+                        autoSave();
+                        updateStats();
+                    });
+                }
+            });
+        }
+        
+        // Auto-save functionality
+        function autoSave() {
+            saveProgress();
+        }
+        
+        // Save progress to localStorage
+        function saveProgress() {
+            const formData = {};
+            
+            // Save radio buttons
+            const radios = document.querySelectorAll('input[type="radio"]:checked');
+            radios.forEach(radio => {
+                formData[radio.name] = radio.value;
+            });
+            
+            // Save checkboxes
+            const checkboxes = document.querySelectorAll('input[type="checkbox"]:checked');
+            checkboxes.forEach(checkbox => {
+                if (!formData[checkbox.name]) {
+                    formData[checkbox.name] = [];
+                }
+                formData[checkbox.name].push(checkbox.value);
+            });
+            
+            // Save text inputs
+            const textInputs = document.querySelectorAll('input[type="text"]');
+            textInputs.forEach(input => {
+                if (input.id) {
+                    formData[input.id] = input.value;
+                }
+            });
+            
+            // Save fill-in-the-blank answers
+            const fillBlanks = document.querySelectorAll('.fill-blank');
+            fillBlanks.forEach((blank, index) => {
+                formData[`blank_${index}`] = blank.textContent || blank.innerText;
+            });
+            
+            localStorage.setItem('italianExerciseProgress', JSON.stringify(formData));
+            localStorage.setItem('italianExerciseTimestamp', new Date().toISOString());
+            
+            showToast('Progress saved! ✓', 'success');
+        }
+        
+        // Load progress from localStorage
+        function loadProgress() {
+            // Skip localStorage if URL parameters exist
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('answers')) {
+                return;  // URL data takes priority
+            }
+            
+            const savedData = localStorage.getItem('italianExerciseProgress');
+            if (!savedData) return;
+            
+            const formData = JSON.parse(savedData);
+            
+            // Restore radio buttons
+            Object.keys(formData).forEach(name => {
+                const value = formData[name];
+                if (typeof value === 'string') {
+                    const radio = document.querySelector(`input[name="${name}"][value="${value}"]`);
+                    if (radio) radio.checked = true;
+                }
+            });
+            
+            // Restore text inputs
+            Object.keys(formData).forEach(id => {
+                if (id.startsWith('blank_')) {
+                    const index = parseInt(id.split('_')[1]);
+                    const blank = document.querySelectorAll('.fill-blank')[index];
+                    if (blank) {
+                        blank.textContent = formData[id];
+                    }
+                } else {
+                    const input = document.getElementById(id);
+                    if (input && input.type === 'text') {
+                        input.value = formData[id];
+                    }
+                }
+            });
+            
+            const timestamp = localStorage.getItem('italianExerciseTimestamp');
+            if (timestamp) {
+                const date = new Date(timestamp);
+                showToast(`Progress loaded from ${date.toLocaleString()}`, 'info');
+            }
+        }
+        
+        // Check answers and provide feedback
+        function checkAnswers() {
+            let correct = 0;
+            let total = 0;
+            const results = [];
+            
+            // Clear previous feedback
+            document.querySelectorAll('.feedback-icon').forEach(icon => icon.remove());
+            document.querySelectorAll('.correct, .incorrect').forEach(el => {
+                el.classList.remove('correct', 'incorrect');
+            });
+            
+            // Check each question
+            Object.keys(answerKey).forEach(questionName => {
+                total++;
+                const correctAnswer = answerKey[questionName];
+                const userAnswer = document.querySelector(`input[name="${questionName}"]:checked`);
+                
+                if (userAnswer) {
+                    const isCorrect = userAnswer.value === correctAnswer;
+                    if (isCorrect) correct++;
+                    
+                    // Add visual feedback
+                    const questionDiv = userAnswer.closest('.question') || userAnswer.closest('tr');
+                    if (questionDiv) {
+                        questionDiv.classList.add(isCorrect ? 'correct' : 'incorrect');
+                        
+                        // Add icon
+                        const icon = document.createElement('span');
+                        icon.className = `feedback-icon ${isCorrect ? 'correct' : 'incorrect'}`;
+                        icon.textContent = isCorrect ? '✓' : '✗';
+                        questionDiv.appendChild(icon);
+                    }
+                    
+                    results.push({
+                        question: questionName,
+                        correct: isCorrect,
+                        userAnswer: userAnswer.value,
+                        correctAnswer: correctAnswer
+                    });
+                } else {
+                    results.push({
+                        question: questionName,
+                        correct: false,
+                        userAnswer: 'Not answered',
+                        correctAnswer: correctAnswer
+                    });
+                }
+            });
+            
+            // Calculate percentage
+            const percentage = Math.round((correct / total) * 100);
+            
+            // Update score display
+            document.getElementById('scoreDisplay').textContent = `${correct}/${total}`;
+            
+            // Show results modal
+            showResultsModal(correct, total, percentage, results);
+            
+            // Save results
+            localStorage.setItem('italianExerciseResults', JSON.stringify({
+                correct,
+                total,
+                percentage,
+                timestamp: new Date().toISOString()
+            }));
+        }
+        
+        // Show results modal
+        function showResultsModal(correct, total, percentage, results) {
+            const modal = document.getElementById('resultsModal');
+            const content = document.getElementById('resultsContent');
+            
+            let emoji = '🎉';
+            let message = 'Excellent work!';
+            if (percentage < 50) {
+                emoji = '💪';
+                message = 'Keep practicing!';
+            } else if (percentage < 75) {
+                emoji = '👍';
+                message = 'Good job!';
+            } else if (percentage < 90) {
+                emoji = '⭐';
+                message = 'Great work!';
+            }
+            
+            content.innerHTML = `
+                <div class="score-display">
+                    <div style="font-size: 4em;">${emoji}</div>
+                    <div class="score">${percentage}%</div>
+                    <div>${message}</div>
+                    <div style="margin-top: 10px; opacity: 0.9;">
+                        ${correct} out of ${total} correct
+                    </div>
+                </div>
+                
+                <div class="answer-summary">
+                    <h3>Answer Summary</h3>
+                    ${results.map((result, index) => `
+                        <div class="answer-item ${result.correct ? 'correct' : 'incorrect'}">
+                            <strong>Question ${index + 1}:</strong> 
+                            ${result.correct ? '✓ Correct' : '✗ Incorrect'}
+                            ${!result.correct && result.userAnswer !== 'Not answered' ? 
+                                `<br><small>Your answer: ${result.userAnswer} | Correct: ${result.correctAnswer}</small>` : ''}
+                        </div>
+                    `).join('')}
+                </div>
+                
+                <div style="text-align: center; margin-top: 20px;">
+                    <button class="btn btn-info" onclick="exportResults()" style="margin-right: 10px;">📄 Export Results</button>
+                    <button class="btn btn-primary" onclick="closeModal()">Close</button>
+                </div>
+            `;
+            
+            modal.style.display = 'block';
+        }
+        
+        // Close modal
+        function closeModal() {
+            document.getElementById('resultsModal').style.display = 'none';
+        }
+        
+        // Update statistics
+        function updateStats() {
+            const totalQuestions = Object.keys(answerKey).length;
+            let answeredCount = 0;
+            
+            // Count answered questions
+            Object.keys(answerKey).forEach(questionName => {
+                const answer = document.querySelector(`input[name="${questionName}"]:checked`);
+                if (answer) answeredCount++;
+            });
+            
+            // Update display
+            document.getElementById('answeredCount').textContent = answeredCount;
+            document.getElementById('totalCount').textContent = totalQuestions;
+            
+            // Update progress bar
+            const percentage = Math.round((answeredCount / totalQuestions) * 100);
+            const progressBar = document.getElementById('progressBar');
+            progressBar.style.width = percentage + '%';
+            progressBar.textContent = percentage + '%';
+        }
+        
+        // Export answers as JSON file for import on another device
+        function exportAnswers() {
+            const formData = {};
+            
+            // Save radio buttons
+            const radios = document.querySelectorAll('input[type="radio"]:checked');
+            radios.forEach(radio => {
+                formData[radio.name] = radio.value;
+            });
+            
+            // Save checkboxes
+            const checkboxes = document.querySelectorAll('input[type="checkbox"]:checked');
+            checkboxes.forEach(checkbox => {
+                if (!formData[checkbox.name]) {
+                    formData[checkbox.name] = [];
+                }
+                formData[checkbox.name].push(checkbox.value);
+            });
+            
+            // Save text inputs
+            const textInputs = document.querySelectorAll('input[type="text"]');
+            textInputs.forEach(input => {
+                if (input.id) {
+                    formData[input.id] = input.value;
+                }
+            });
+            
+            // Save fill-in-the-blank answers
+            const fillBlanks = document.querySelectorAll('.fill-blank');
+            fillBlanks.forEach((blank, index) => {
+                formData[`blank_${index}`] = blank.textContent || blank.innerText;
+            });
+            
+            // Create export object with metadata
+            const exportData = {
+                version: '1.0',
+                timestamp: new Date().toISOString(),
+                answers: formData,
+                stats: {
+                    answered: document.getElementById('answeredCount').textContent,
+                    total: document.getElementById('totalCount').textContent
+                }
+            };
+            
+            // Create download
+            const blob = new Blob([JSON.stringify(exportData, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `italian_exercises_answers_${Date.now()}.json`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            
+            showToast('Answers exported! You can import this file on any device. 📥', 'success');
+        }
+        
+        // Import answers from JSON file
+        function importAnswers(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const importData = JSON.parse(e.target.result);
+                    
+                    // Validate file format
+                    if (!importData.answers || !importData.version) {
+                        showToast('Invalid file format! ❌', 'error');
+                        return;
+                    }
+                    
+                    const formData = importData.answers;
+                    
+                    // Clear existing answers first
+                    document.querySelectorAll('input[type="radio"]').forEach(radio => {
+                        radio.checked = false;
+                    });
+                    
+                    // Restore radio buttons
+                    Object.keys(formData).forEach(name => {
+                        const value = formData[name];
+                        if (typeof value === 'string' && !name.startsWith('blank_')) {
+                            const radio = document.querySelector(`input[name="${name}"][value="${value}"]`);
+                            if (radio) radio.checked = true;
+                        }
+                    });
+                    
+                    // Restore text inputs
+                    Object.keys(formData).forEach(id => {
+                        if (id.startsWith('blank_')) {
+                            const index = parseInt(id.split('_')[1]);
+                            const blank = document.querySelectorAll('.fill-blank')[index];
+                            if (blank) {
+                                blank.textContent = formData[id];
+                            }
+                        } else {
+                            const input = document.getElementById(id);
+                            if (input && input.type === 'text') {
+                                input.value = formData[id];
+                            }
+                        }
+                    });
+                    
+                    // Save to localStorage
+                    localStorage.setItem('italianExerciseProgress', JSON.stringify(formData));
+                    localStorage.setItem('italianExerciseTimestamp', new Date().toISOString());
+                    
+                    // Update stats
+                    updateStats();
+                    
+                    const importDate = new Date(importData.timestamp);
+                    showToast(`Answers imported successfully from ${importDate.toLocaleString()}! ✓`, 'success');
+                    
+                } catch (error) {
+                    showToast('Error reading file! Please check the file format. ❌', 'error');
+                    console.error('Import error:', error);
+                }
+            };
+            
+            reader.readAsText(file);
+            
+            // Reset file input so the same file can be imported again
+            event.target.value = '';
+        }
+        
+        // Export results as text file (kept for after checking answers)
+        function exportResults() {
+            const timestamp = new Date().toLocaleString();
+            let exportText = `Italian Reading Exercises - Results\n`;
+            exportText += `Date: ${timestamp}\n`;
+            exportText += `${'='.repeat(50)}\n\n`;
+            
+            // Get results
+            const savedResults = localStorage.getItem('italianExerciseResults');
+            if (savedResults) {
+                const results = JSON.parse(savedResults);
+                exportText += `Score: ${results.correct}/${results.total} (${results.percentage}%)\n\n`;
+            }
+            
+            // Get all answers
+            exportText += `ANSWERS:\n${'='.repeat(50)}\n\n`;
+            
+            Object.keys(answerKey).forEach((questionName, index) => {
+                const answer = document.querySelector(`input[name="${questionName}"]:checked`);
+                const correctAnswer = answerKey[questionName];
+                const userAnswer = answer ? answer.value : 'Not answered';
+                const isCorrect = userAnswer === correctAnswer;
+                
+                exportText += `Question ${index + 1} (${questionName}):\n`;
+                exportText += `  Your answer: ${userAnswer}\n`;
+                exportText += `  Correct answer: ${correctAnswer}\n`;
+                exportText += `  Status: ${isCorrect ? '✓ CORRECT' : '✗ INCORRECT'}\n\n`;
+            });
+            
+            // Create download
+            const blob = new Blob([exportText], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `italian_exercises_results_${Date.now()}.txt`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            
+            showToast('Results exported successfully! 📄', 'success');
+        }
+        
+        // Reset all answers
+        function resetAll() {
+            if (!confirm('Are you sure you want to reset all answers? This cannot be undone.')) {
+                return;
+            }
+            
+            // Clear all radio buttons
+            document.querySelectorAll('input[type="radio"]').forEach(radio => {
+                radio.checked = false;
+            });
+            
+            // Clear all checkboxes
+            document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
+                checkbox.checked = false;
+            });
+            
+            // Clear all text inputs
+            document.querySelectorAll('input[type="text"]').forEach(input => {
+                input.value = '';
+            });
+            
+            // Clear fill-in-the-blank
+            document.querySelectorAll('.fill-blank').forEach(blank => {
+                blank.textContent = '';
+            });
+            
+            // Clear feedback
+            document.querySelectorAll('.feedback-icon').forEach(icon => icon.remove());
+            document.querySelectorAll('.correct, .incorrect').forEach(el => {
+                el.classList.remove('correct', 'incorrect');
+            });
+            
+            // Clear localStorage
+            localStorage.removeItem('italianExerciseProgress');
+            localStorage.removeItem('italianExerciseResults');
+            localStorage.removeItem('italianExerciseTimestamp');
+            
+            // Remove URL parameters
+            const baseURL = window.location.origin + window.location.pathname;
+            window.history.replaceState({}, document.title, baseURL);
+            
+            // Reset score display
+            document.getElementById('scoreDisplay').textContent = '-';
+            
+            // Update stats
+            updateStats();
+            
+            showToast('All answers have been reset! 🔄', 'info');
+        }
+        
+        // Show toast notification
+        function showToast(message, type = 'info') {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.className = `toast ${type} show`;
+            
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+        
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            const modal = document.getElementById('resultsModal');
+            if (event.target === modal) {
+                closeModal();
+            }
+        }
+        
+        // Make fill-in-the-blank editable
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelectorAll('.fill-blank').forEach(blank => {
+                blank.contentEditable = true;
+                blank.style.minHeight = '20px';
+                blank.style.display = 'inline-block';
+                blank.style.cursor = 'text';
+            });
+        });
+    </script>
+</body>
+</html>
